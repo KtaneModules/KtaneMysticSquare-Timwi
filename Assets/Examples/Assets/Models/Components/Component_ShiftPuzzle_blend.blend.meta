@@ -1,0 +1,181 @@
+fileFormatVersion: 2
+guid: aead8a7d4be2f554fbc037f103dbf270
+timeCreated: 1471432461
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: key
+    100004: key_001
+    100006: key_002
+    100008: key_003
+    100010: key_004
+    100012: key_005
+    100014: key_006
+    100016: key_007
+    100018: Part1
+    100020: Part2
+    100022: Part3
+    100024: Part4
+    100026: Part5
+    100028: Part6
+    100030: Part7
+    100032: Part8
+    100034: PuzzleBackground
+    100036: RecessedInner
+    100038: key1
+    100040: key2
+    100042: key3
+    100044: key4
+    100046: key5
+    100048: key6
+    100050: key7
+    100052: key8
+    400000: //RootNode
+    400002: key
+    400004: key_001
+    400006: key_002
+    400008: key_003
+    400010: key_004
+    400012: key_005
+    400014: key_006
+    400016: key_007
+    400018: Part1
+    400020: Part2
+    400022: Part3
+    400024: Part4
+    400026: Part5
+    400028: Part6
+    400030: Part7
+    400032: Part8
+    400034: PuzzleBackground
+    400036: RecessedInner
+    400038: key1
+    400040: key2
+    400042: key3
+    400044: key4
+    400046: key5
+    400048: key6
+    400050: key7
+    400052: key8
+    2300000: key
+    2300002: key_001
+    2300004: key_002
+    2300006: key_003
+    2300008: key_004
+    2300010: key_005
+    2300012: key_006
+    2300014: key_007
+    2300016: PuzzleBackground
+    2300018: RecessedInner
+    2300020: key1
+    2300022: key2
+    2300024: key3
+    2300026: key4
+    2300028: key5
+    2300030: key6
+    2300032: key7
+    2300034: key8
+    3300000: key
+    3300002: key_001
+    3300004: key_002
+    3300006: key_003
+    3300008: key_004
+    3300010: key_005
+    3300012: key_006
+    3300014: key_007
+    3300016: PuzzleBackground
+    3300018: RecessedInner
+    3300020: key1
+    3300022: key2
+    3300024: key3
+    3300026: key4
+    3300028: key5
+    3300030: key6
+    3300032: key7
+    3300034: key8
+    4300000: RecessedInner
+    4300002: PuzzleBackground
+    4300004: key_007
+    4300006: key_006
+    4300008: key_005
+    4300010: key_004
+    4300012: key_003
+    4300014: key_002
+    4300016: key_001
+    4300018: key
+    4300020: key8
+    4300022: key6
+    4300024: key5
+    4300026: key7
+    4300028: key4
+    4300030: key3
+    4300032: key2
+    4300034: key1
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.001
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
