@@ -119,19 +119,20 @@ public class MysticSquareModule : MonoBehaviour
             Dictionary<string, string> serialDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(serialResponses[0]);
             serial = serialDict["serial"];
         }
-        var lastSerialDigit = serial[5] - 48;
-        Debug.Log("Serial: " + serial + "          lastSerialDigit: " + lastSerialDigit);
-
-        // Place objectives
-        var useRows = lastSerialDigit != 0 && (lastSerialDigit == _field[0] || lastSerialDigit == _field[2] || lastSerialDigit == _field[4] || lastSerialDigit == _field[6] || lastSerialDigit == _field[8]);
 
         // If midfield is empty, skull is under the 7
         if (_field[4] == 0)
         {
             _skullPos = Array.IndexOf(_field, 7);
+            Debug.Log("[Mystic Square] Skull under 7 because center is blank.");
         }
         else
         {
+            var lastSerialDigit = serial[5] - 48;
+            var useRows = lastSerialDigit != 0 && (lastSerialDigit == _field[0] || lastSerialDigit == _field[2] || lastSerialDigit == _field[4] || lastSerialDigit == _field[6] || lastSerialDigit == _field[8]);
+            Debug.LogFormat("[Mystic Square] Last serial digit: {0}; therefore, use {1}", lastSerialDigit, useRows ? "rows" : "columns");
+            _skullPos = Array.IndexOf(_field, 0);
+            var skullPath = "blank";
             for (int k = 0; k <= 7; k++)
             {
                 var checkN = useRows ? _table[_field[4] - 1, k] : _table[k, _field[4] - 1];
@@ -139,10 +140,13 @@ public class MysticSquareModule : MonoBehaviour
                 int verDif = ix / 3 - _skullPos / 3;
                 int horDif = ix % 3 - _skullPos % 3;
                 if ((Mathf.Abs(horDif) + Mathf.Abs(verDif)) == 1)
+                {
                     _skullPos = ix;
+                    skullPath += " → " + _field[ix];
+                }
             }
+            Debug.Log("[Mystic Square] Skull path: " + skullPath);
         }
-        Debug.Log("Skull under: " + _field[_skullPos]);
 
         do
             _knightPos = Rnd.Range(0, 9);
@@ -214,7 +218,6 @@ public class MysticSquareModule : MonoBehaviour
         int permutations;
         do
         {
-            Debug.Log("Shuffling buttons...");
             _field = Enumerable.Range(0, 9).ToArray();
             for (int j = _field.Length; j >= 1; j--)
             {
@@ -234,7 +237,8 @@ public class MysticSquareModule : MonoBehaviour
                         permutations++;
         }
         while (permutations % 2 != 0);
-        Debug.Log("Field: " + _field[0] + _field[1] + _field[2] + _field[3] + _field[4] + _field[5] + _field[6] + _field[7] + _field[8]);
+
+        Debug.LogFormat("[Mystic Square] Field:\n{0}\n{1}\n{2}", "" + _field[0] + _field[1] + _field[2], "" + _field[3] + _field[4] + _field[5], "" + _field[6] + _field[7] + _field[8]);
     }
 
     void OnPress(int position)
@@ -258,7 +262,7 @@ public class MysticSquareModule : MonoBehaviour
                 if (_field[_knightPos] == 0)
                 {
                     _isInDanger = false;
-                    Debug.Log("Found the knight.");
+                    Debug.Log("[Mystic Square] Found the knight.");
                 }
                 if (_field[_skullPos] == 0)
                     GetComponent<KMBombModule>().HandleStrike();
