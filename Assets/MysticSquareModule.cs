@@ -241,6 +241,7 @@ public class MysticSquareModule : MonoBehaviour
     {
         if (!_isActivated)
             return;
+        ButtonSelectables[position].AddInteractionPunch();
         int empty = Array.IndexOf(_field, 0);
         int button = _field[position] - 1;
         if (Math.Abs(position % 3 - empty % 3) + Math.Abs(position / 3 - empty / 3) == 1)
