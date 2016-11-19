@@ -11,6 +11,10 @@
         .skull-diagram {
             float: right;
         }
+
+        .full-solution {
+            margin: 0 auto 1em;
+        }
     </style>
 </head>
 <body>
@@ -56,176 +60,181 @@
                     <tr><th>8</th><td>5</td><td>8</td><td>4</td><td>7</td><td>2</td><td>6</td><td>1</td><td>3</tr>
                 </table>
 
-                <div class="page-footer relative-footer"></div>
             </div>
-
-            <div class="page">
-                <div class="page-header">
-                    <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
-                    <span class="page-header-section-title">Mystic Square</span>
-                </div>
-                <div class="page-content">
-                    <p><strong>“row”/“column” on this page always refers to the module.</strong></p>
-                    <img src="img/Mystic Square/Knight.png" class="diagram">
-                    <p>Determining the desired constellation:</p>
-                    <p>Before moving any sliders, use the sum of the rows as R1, R2 and R3 and the sum of the columns as C1, C2 and C3 to look up the target constellation in the table below.  The following constellation is also always acceptable.</p>
-                    <p><img src="img/Mystic Square/sketch02.png" class="bomb-diagram" width="300"></p>
-                    <table>
-                        <tr>
-                            <td></td>
-                            <td>
-                                C1 &gt; C2,C3
-                            </td>
-                            <td>
-                                C2 &gt; C1,C3
-                            </td>
-                            <td>
-                                C3 &gt; C1,C2
-                            </td>
-                            <td>
-                                else
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                R1 &gt; R2,R3
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>1</td><td>?</td><td>2</td></tr>
-                                    <tr><td>?</td><td>?</td><td>?</td></tr>
-                                    <tr><td>4</td><td>?</td><td>3</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>1</td><td>?</td><td>2</td></tr>
-                                    <tr><td>?</td><td>?</td><td>?</td></tr>
-                                    <tr><td>3</td><td>?</td><td>4</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>1</td><td>?</td><td>3</td></tr>
-                                    <tr><td>?</td><td>?</td><td>?</td></tr>
-                                    <tr><td>7</td><td>?</td><td>5</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>1</td><td>?</td><td>3</td></tr>
-                                    <tr><td>?</td><td>?</td><td>?</td></tr>
-                                    <tr><td>5</td><td>?</td><td>7</td></tr>
-                                </table>
-                            </td>
-                        </tr>
-
-
-                        <tr>
-                            <td>
-                                R2 &gt; R1,R3
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>?</td><td>1</td><td>?</td></tr>
-                                    <tr><td>4</td><td>?</td><td>2</td></tr>
-                                    <tr><td>?</td><td>3</td><td>?</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>?</td><td>1</td><td>?</td></tr>
-                                    <tr><td>3</td><td>?</td><td>2</td></tr>
-                                    <tr><td>?</td><td>4</td><td>?</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>?</td><td>2</td><td>?</td></tr>
-                                    <tr><td>8</td><td>?</td><td>4</td></tr>
-                                    <tr><td>?</td><td>6</td><td>?</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>?</td><td>2</td><td>?</td></tr>
-                                    <tr><td>6</td><td>?</td><td>4</td></tr>
-                                    <tr><td>?</td><td>8</td><td>?</td></tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                R3 &gt; R1,R2
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>1</td><td>?</td><td>?</td></tr>
-                                    <tr><td>?</td><td>2</td><td>?</td></tr>
-                                    <tr><td>?</td><td>?</td><td>3</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>?</td><td>?</td><td>3</td></tr>
-                                    <tr><td>?</td><td>2</td><td>?</td></tr>
-                                    <tr><td>1</td><td>?</td><td>?</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>3</td><td>?</td><td>?</td></tr>
-                                    <tr><td>?</td><td>2</td><td>?</td></tr>
-                                    <tr><td>?</td><td>?</td><td>1</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>?</td><td>?</td><td>1</td></tr>
-                                    <tr><td>?</td><td>2</td><td>?</td></tr>
-                                    <tr><td>3</td><td>?</td><td>?</td></tr>
-                                </table>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                else
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>1</td><td>2</td><td>3</td></tr>
-                                    <tr><td>?</td><td>4</td><td>?</td></tr>
-                                    <tr><td>?</td><td>5</td><td>?</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>1</td><td>?</td><td>?</td></tr>
-                                    <tr><td>2</td><td>4</td><td>5</td></tr>
-                                    <tr><td>3</td><td>?</td><td>?</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>?</td><td>5</td><td>?</td></tr>
-                                    <tr><td>?</td><td>4</td><td>?</td></tr>
-                                    <tr><td>1</td><td>2</td><td>3</td></tr>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr><td>?</td><td>?</td><td>1</td></tr>
-                                    <tr><td>5</td><td>4</td><td>2</td></tr>
-                                    <tr><td>?</td><td>?</td><td>3</td></tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="page-footer relative-footer"></div>
-                </div>
+            <div class="page-footer relative-footer">Page 1 of 2</div>
+        </div>
+        <div class="page">
+            <div class="page-header">
+                <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+                <span class="page-header-section-title">Mystic Square</span>
             </div>
+            <div class="page-content">
+                <p><strong>“row”/“column” on this page always refers to the module.</strong></p>
+                <img src="img/Mystic Square/Knight.png" class="diagram">
+                <p>Determining the desired constellation:</p>
+                <p>Before moving any sliders, use the sum of the rows as R1, R2 and R3 and the sum of the columns as C1, C2 and C3 to look up the target constellation in the table below.  The following constellation is also always acceptable.</p>
+
+                <table class='full-solution'>
+                    <tr><td>1<td>2<td>3</tr>
+                    <tr><td>4<td>5<td>6</tr>
+                    <tr><td>7<td>8<td> </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td></td>
+                        <td>
+                            C1 &gt; C2,C3
+                        </td>
+                        <td>
+                            C2 &gt; C1,C3
+                        </td>
+                        <td>
+                            C3 &gt; C1,C2
+                        </td>
+                        <td>
+                            else
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            R1 &gt; R2,R3
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>1</td><td>?</td><td>2</td></tr>
+                                <tr><td>?</td><td>?</td><td>?</td></tr>
+                                <tr><td>4</td><td>?</td><td>3</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>1</td><td>?</td><td>2</td></tr>
+                                <tr><td>?</td><td>?</td><td>?</td></tr>
+                                <tr><td>3</td><td>?</td><td>4</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>1</td><td>?</td><td>3</td></tr>
+                                <tr><td>?</td><td>?</td><td>?</td></tr>
+                                <tr><td>7</td><td>?</td><td>5</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>1</td><td>?</td><td>3</td></tr>
+                                <tr><td>?</td><td>?</td><td>?</td></tr>
+                                <tr><td>5</td><td>?</td><td>7</td></tr>
+                            </table>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            R2 &gt; R1,R3
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>?</td><td>1</td><td>?</td></tr>
+                                <tr><td>4</td><td>?</td><td>2</td></tr>
+                                <tr><td>?</td><td>3</td><td>?</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>?</td><td>1</td><td>?</td></tr>
+                                <tr><td>3</td><td>?</td><td>2</td></tr>
+                                <tr><td>?</td><td>4</td><td>?</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>?</td><td>2</td><td>?</td></tr>
+                                <tr><td>8</td><td>?</td><td>4</td></tr>
+                                <tr><td>?</td><td>6</td><td>?</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>?</td><td>2</td><td>?</td></tr>
+                                <tr><td>6</td><td>?</td><td>4</td></tr>
+                                <tr><td>?</td><td>8</td><td>?</td></tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            R3 &gt; R1,R2
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>1</td><td>?</td><td>?</td></tr>
+                                <tr><td>?</td><td>2</td><td>?</td></tr>
+                                <tr><td>?</td><td>?</td><td>3</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>?</td><td>?</td><td>3</td></tr>
+                                <tr><td>?</td><td>2</td><td>?</td></tr>
+                                <tr><td>1</td><td>?</td><td>?</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>3</td><td>?</td><td>?</td></tr>
+                                <tr><td>?</td><td>2</td><td>?</td></tr>
+                                <tr><td>?</td><td>?</td><td>1</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>?</td><td>?</td><td>1</td></tr>
+                                <tr><td>?</td><td>2</td><td>?</td></tr>
+                                <tr><td>3</td><td>?</td><td>?</td></tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            else
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>1</td><td>2</td><td>3</td></tr>
+                                <tr><td>?</td><td>4</td><td>?</td></tr>
+                                <tr><td>?</td><td>5</td><td>?</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>1</td><td>?</td><td>?</td></tr>
+                                <tr><td>2</td><td>4</td><td>5</td></tr>
+                                <tr><td>3</td><td>?</td><td>?</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>?</td><td>5</td><td>?</td></tr>
+                                <tr><td>?</td><td>4</td><td>?</td></tr>
+                                <tr><td>1</td><td>2</td><td>3</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr><td>?</td><td>?</td><td>1</td></tr>
+                                <tr><td>5</td><td>4</td><td>2</td></tr>
+                                <tr><td>?</td><td>?</td><td>3</td></tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="page-footer relative-footer">Page 2 of 2</div>
         </div>
     </div>
 </body>

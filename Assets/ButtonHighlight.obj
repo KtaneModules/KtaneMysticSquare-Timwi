@@ -1,0 +1,14 @@
+o ButtonHighlight
+v -1 0 -1
+v 1 0 -1
+v 1 0 1
+v -1 0 1
+v -.8 0 -.8
+v .8 0 -.8
+v .8 0 .8
+v -.8 0 .8
+g ButtonHighlight
+f 1 2 6 5
+f 2 3 7 6
+f 7 3 4 8
+f 5 8 4 1
