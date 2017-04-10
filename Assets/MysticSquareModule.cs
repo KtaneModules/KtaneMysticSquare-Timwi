@@ -17,6 +17,9 @@ public class MysticSquareModule : MonoBehaviour
     bool _isInDanger;
     bool _isActivated;
 
+    int _moduleId;
+    static int _moduleIdCounter = 1;
+
     static int[,] _table = new int[8, 8] {
         { 1, 3, 5, 4, 6, 7, 2, 8 },
         { 2, 5, 7, 3, 8, 1, 4, 6 },
@@ -30,6 +33,7 @@ public class MysticSquareModule : MonoBehaviour
 
     void Start()
     {
+        _moduleId = _moduleIdCounter++;
         for (int i = 0; i < ButtonSelectables.Length; i++)
         {
             int j = i;
@@ -124,13 +128,13 @@ public class MysticSquareModule : MonoBehaviour
         if (_field[4] == 0)
         {
             _skullPos = Array.IndexOf(_field, 7);
-            Debug.Log("[Mystic Square] Skull under 7 because center is blank.");
+            Debug.LogFormat("[Mystic Square #{0}] Skull under 7 because center is blank.", _moduleId);
         }
         else
         {
             var lastSerialDigit = serial[5] - 48;
             var useRows = lastSerialDigit != 0 && (lastSerialDigit == _field[0] || lastSerialDigit == _field[2] || lastSerialDigit == _field[4] || lastSerialDigit == _field[6] || lastSerialDigit == _field[8]);
-            Debug.LogFormat("[Mystic Square] Last serial digit: {0}; therefore, use {1}", lastSerialDigit, useRows ? "rows" : "columns");
+            Debug.LogFormat("[Mystic Square #{2}] Last serial digit: {0}; therefore, use {1}", lastSerialDigit, useRows ? "rows" : "columns", _moduleId);
             _skullPos = Array.IndexOf(_field, 0);
             var skullPath = "blank";
             for (int k = 0; k <= 7; k++)
@@ -145,7 +149,7 @@ public class MysticSquareModule : MonoBehaviour
                     skullPath += " → " + _field[ix];
                 }
             }
-            Debug.Log("[Mystic Square] Skull path: " + skullPath);
+            Debug.LogFormat("[Mystic Square #{0}] Skull path: {1}", _moduleId, skullPath);
         }
 
         do
@@ -238,7 +242,7 @@ public class MysticSquareModule : MonoBehaviour
         }
         while (permutations % 2 != 0);
 
-        Debug.LogFormat("[Mystic Square] Field:\n{0}\n{1}\n{2}", "" + _field[0] + _field[1] + _field[2], "" + _field[3] + _field[4] + _field[5], "" + _field[6] + _field[7] + _field[8]);
+        Debug.LogFormat("[Mystic Square #{3}] Field:\n{0}\n{1}\n{2}", "" + _field[0] + _field[1] + _field[2], "" + _field[3] + _field[4] + _field[5], "" + _field[6] + _field[7] + _field[8], _moduleId);
     }
 
     void OnPress(int position)
@@ -262,7 +266,7 @@ public class MysticSquareModule : MonoBehaviour
                 if (_field[_knightPos] == 0)
                 {
                     _isInDanger = false;
-                    Debug.Log("[Mystic Square] Found the knight.");
+                    Debug.LogFormat("[Mystic Square #{0}] Found the knight.", _moduleId);
                 }
                 if (_field[_skullPos] == 0)
                     GetComponent<KMBombModule>().HandleStrike();
