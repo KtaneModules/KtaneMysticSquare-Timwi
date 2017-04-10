@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -273,6 +274,51 @@ public class MysticSquareModule : MonoBehaviour
             }
             else if (checkWin())
                 GetComponent<KMBombModule>().HandlePass();
+        }
+    }
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        var pieces = command.ToLowerInvariant().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        if (pieces.Length < 2 || pieces[0] != "press")
+            yield break;
+
+        var funcs = new List<Func<KMSelectable>>();
+        foreach (var piece in pieces.Skip(1))
+        {
+            switch (piece.Replace("center", "middle").Replace("centre", "middle"))
+            {
+                case "tl": case "lt": case "topleft": case "lefttop": funcs.Add(() => ButtonSelectables[0]); break;
+                case "tm": case "tc": case "mt": case "ct": case "topmiddle": case "middletop": funcs.Add(() => ButtonSelectables[1]); break;
+                case "tr": case "rt": case "topright": case "righttop": funcs.Add(() => ButtonSelectables[2]); break;
+
+                case "ml": case "cl": case "lm": case "lc": case "middleleft": case "leftmiddle": funcs.Add(() => ButtonSelectables[3]); break;
+                case "mm": case "cm": case "mc": case "cc": case "middle": case "middlemiddle": funcs.Add(() => ButtonSelectables[4]); break;
+                case "mr": case "cr": case "rm": case "rc": case "middleright": case "rightmiddle": funcs.Add(() => ButtonSelectables[5]); break;
+
+                case "bl": case "lb": case "bottomleft": case "leftbottom": funcs.Add(() => ButtonSelectables[6]); break;
+                case "bm": case "bc": case "mb": case "cb": case "bottommiddle": case "middlebottom": funcs.Add(() => ButtonSelectables[7]); break;
+                case "br": case "rb": case "bottomright": case "rightbottom": funcs.Add(() => ButtonSelectables[8]); break;
+
+                case "1": funcs.Add(() => ButtonSelectables[Array.IndexOf(_field, 1)]); break;
+                case "2": funcs.Add(() => ButtonSelectables[Array.IndexOf(_field, 2)]); break;
+                case "3": funcs.Add(() => ButtonSelectables[Array.IndexOf(_field, 3)]); break;
+                case "4": funcs.Add(() => ButtonSelectables[Array.IndexOf(_field, 4)]); break;
+                case "5": funcs.Add(() => ButtonSelectables[Array.IndexOf(_field, 5)]); break;
+                case "6": funcs.Add(() => ButtonSelectables[Array.IndexOf(_field, 6)]); break;
+                case "7": funcs.Add(() => ButtonSelectables[Array.IndexOf(_field, 7)]); break;
+                case "8": funcs.Add(() => ButtonSelectables[Array.IndexOf(_field, 8)]); break;
+
+                default: yield break;
+            }
+        }
+
+        foreach (var func in funcs)
+        {
+            var btn = func();
+            yield return btn;
+            yield return new WaitForSeconds(.1f);
+            yield return btn;
         }
     }
 }
