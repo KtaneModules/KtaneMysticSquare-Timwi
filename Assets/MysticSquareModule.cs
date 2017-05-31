@@ -11,17 +11,20 @@ public class MysticSquareModule : MonoBehaviour
 {
     public KMSelectable[] ButtonSelectables;
     public Transform[] ButtonObjects;
-    public Transform EmptyField, Skull, Knight;
+    public Transform Skull, Knight;
 
-    int[] _field = new int[9] { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
-    int _skullPos, _knightPos, _winningCondition;
-    bool _isInDanger;
-    bool _isActivated;
+    private int[] _field = new int[9] { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
+    private int _skullPos, _knightPos, _winningCondition;
+    private bool _isInDanger;
+    private bool _isActivated;
 
-    int _moduleId;
-    static int _moduleIdCounter = 1;
+    private Queue<int> _buttonIndexes = new Queue<int>();
+    private Queue<Vector3> _buttonPositions = new Queue<Vector3>();
 
-    static int[,] _table = new int[8, 8] {
+    private int _moduleId;
+    private static int _moduleIdCounter = 1;
+
+    private static int[,] _table = new int[8, 8] {
         { 1, 3, 5, 4, 6, 7, 2, 8 },
         { 2, 5, 7, 3, 8, 1, 4, 6 },
         { 6, 4, 8, 1, 7, 3, 5, 2 },
@@ -34,6 +37,8 @@ public class MysticSquareModule : MonoBehaviour
 
     void Start()
     {
+        Skull.gameObject.SetActive(false);
+        Knight.gameObject.SetActive(false);
         _moduleId = _moduleIdCounter++;
         for (int i = 0; i < ButtonSelectables.Length; i++)
         {
@@ -48,9 +53,39 @@ public class MysticSquareModule : MonoBehaviour
         _skullPos = 0;
         _knightPos = 0;
 
-        initArray();
+        // Shuffle up the numbers
+        int permutations;
+        do
+        {
+            _field = Enumerable.Range(0, 9).ToArray();
+            for (int j = _field.Length; j >= 1; j--)
+            {
+                int item = Rnd.Range(0, j);
+                if (item < j - 1)
+                {
+                    var t = _field[item];
+                    _field[item] = _field[j - 1];
+                    _field[j - 1] = t;
+                }
+            }
 
-        // Find winning condition
+            // We need an odd permutation, otherwise the puzzle is not solvable.
+            permutations = 0;
+            for (int i = 0; i <= 8; i++)
+                for (int j = 0; j < i; j++)
+                    if (_field[i] != 0 && _field[j] != 0 && (_field[i] < _field[j]))
+                        permutations++;
+        }
+        while (permutations % 2 != 0);
+
+        Debug.LogFormat("[Mystic Square #{3}] Field:\n{0}\n{1}\n{2}", "" + _field[0] + _field[1] + _field[2], "" + _field[3] + _field[4] + _field[5], "" + _field[6] + _field[7] + _field[8], _moduleId);
+
+        // Put the game objects in the right places
+        for (int i = 0; i < 9; i++)
+            if (_field[i] != 0)
+                ButtonObjects[_field[i] - 1].localPosition = getButtonPos(i % 3, i / 3);
+
+        // Find the “easier” winning condition
         _winningCondition = 0;
         if (topSum() > horMidSum() && topSum() > bottomSum())
             _winningCondition += 0;
@@ -69,44 +104,62 @@ public class MysticSquareModule : MonoBehaviour
         else
             _winningCondition += 3;
 
-        // Set start field
-        int[] start = new int[9] { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
-        Vector3 dif;
-
-        for (int i = 0; i <= 8; i++)
+        var fieldStr = "?????????".ToCharArray();
+        switch (_winningCondition)
         {
-            for (int j = 0; j <= 8; j++)
-            {
-                if (start[j] == _field[i])
-                {
-                    if (start[j] == 0)
-                    {
-                        if (start[i] != 0)
-                        {
-                            dif = ButtonObjects[start[i] - 1].gameObject.transform.position - EmptyField.transform.position;
-                            ButtonObjects[start[i] - 1].gameObject.transform.Translate(-dif, Space.World);
-                            EmptyField.transform.Translate(dif, Space.World);
-                        }
-                    }
-                    else if (start[i] != 0)
-                    {
-                        dif = ButtonObjects[start[i] - 1].gameObject.transform.position - ButtonObjects[start[j] - 1].gameObject.transform.position;
-                        ButtonObjects[start[i] - 1].gameObject.transform.Translate(-dif, Space.World);
-                        ButtonObjects[start[j] - 1].gameObject.transform.Translate(dif, Space.World);
-                    }
-                    else
-                    {
-                        dif = EmptyField.transform.position - ButtonObjects[start[j] - 1].gameObject.transform.position;
-                        EmptyField.transform.Translate(-dif, Space.World);
-                        ButtonObjects[start[j] - 1].gameObject.transform.Translate(dif, Space.World);
-                    }
+            case 0: fieldStr[0] = '1'; fieldStr[2] = '2'; fieldStr[6] = '4'; fieldStr[8] = '3'; break;
+            case 1: fieldStr[0] = '1'; fieldStr[2] = '2'; fieldStr[6] = '3'; fieldStr[8] = '4'; break;
+            case 2: fieldStr[0] = '1'; fieldStr[2] = '3'; fieldStr[6] = '7'; fieldStr[8] = '5'; break;
+            case 3: fieldStr[0] = '1'; fieldStr[2] = '3'; fieldStr[6] = '5'; fieldStr[8] = '7'; break;
+            case 10: fieldStr[1] = '1'; fieldStr[5] = '2'; fieldStr[7] = '3'; fieldStr[3] = '4'; break;
+            case 11: fieldStr[1] = '1'; fieldStr[5] = '2'; fieldStr[7] = '4'; fieldStr[3] = '3'; break;
+            case 12: fieldStr[1] = '2'; fieldStr[5] = '4'; fieldStr[7] = '6'; fieldStr[3] = '8'; break;
+            case 13: fieldStr[1] = '2'; fieldStr[5] = '4'; fieldStr[7] = '8'; fieldStr[3] = '6'; break;
+            case 20: fieldStr[0] = '1'; fieldStr[4] = '2'; fieldStr[8] = '3'; break;
+            case 21: fieldStr[6] = '1'; fieldStr[4] = '2'; fieldStr[2] = '3'; break;
+            case 22: fieldStr[0] = '3'; fieldStr[4] = '2'; fieldStr[8] = '1'; break;
+            case 23: fieldStr[6] = '3'; fieldStr[4] = '2'; fieldStr[2] = '1'; break;
+            case 30: fieldStr[0] = '1'; fieldStr[1] = '2'; fieldStr[2] = '3'; fieldStr[4] = '4'; fieldStr[7] = '5'; break;
+            case 31: fieldStr[0] = '1'; fieldStr[3] = '2'; fieldStr[6] = '3'; fieldStr[4] = '4'; fieldStr[5] = '5'; break;
+            case 32: fieldStr[6] = '1'; fieldStr[7] = '2'; fieldStr[8] = '3'; fieldStr[4] = '4'; fieldStr[1] = '5'; break;
+            case 33: fieldStr[2] = '1'; fieldStr[5] = '2'; fieldStr[8] = '3'; fieldStr[4] = '4'; fieldStr[3] = '5'; break;
+        }
+        Debug.LogFormat("[Mystic Square #{3}] Easy solution:\n{0}\n{1}\n{2}", "" + fieldStr[0] + fieldStr[1] + fieldStr[2], "" + fieldStr[3] + fieldStr[4] + fieldStr[5], "" + fieldStr[6] + fieldStr[7] + fieldStr[8], _moduleId);
 
-                    var temp = start[j];
-                    start[j] = start[i];
-                    start[i] = temp;
-                }
+        StartCoroutine(MoveButtons());
+    }
+
+    private float easeOutSine(float time, float duration, float from, float to)
+    {
+        return (to - from) * Mathf.Sin(time / duration * (Mathf.PI / 2)) + from;
+    }
+
+    private IEnumerator MoveButtons()
+    {
+        const int numFrames = 5;
+
+        while (true)
+        {
+            while (_buttonIndexes.Count == 0)
+                yield return null;
+
+            var ix = _buttonIndexes.Dequeue();
+            var oldPos = ButtonObjects[ix].localPosition;
+            var newPos = _buttonPositions.Dequeue();
+            for (int i = 1; i <= numFrames; i++)
+            {
+                ButtonObjects[ix].localPosition = new Vector3(
+                    easeOutSine(i, numFrames, oldPos.x, newPos.x),
+                    easeOutSine(i, numFrames, oldPos.y, newPos.y),
+                    easeOutSine(i, numFrames, oldPos.z, newPos.z));
+                yield return null;
             }
         }
+    }
+
+    private Vector3 getButtonPos(int x, int y)
+    {
+        return new Vector3(-0.002f + 0.044f * x, 0, 0.001f - .043f * y);
     }
 
     void OnActivate()
@@ -159,6 +212,8 @@ public class MysticSquareModule : MonoBehaviour
 
         Skull.localPosition = new Vector3(.063f - (_skullPos % 3) * .045f, 0, -.028f + .0425f * (_skullPos / 3));
         Knight.localPosition = new Vector3(.063f - (_knightPos % 3) * .045f, 0, -.028f + .0425f * (_knightPos / 3));
+        Skull.gameObject.SetActive(true);
+        Knight.gameObject.SetActive(true);
     }
 
     int topSum()
@@ -218,34 +273,6 @@ public class MysticSquareModule : MonoBehaviour
         return false;
     }
 
-    void initArray()
-    {
-        int permutations;
-        do
-        {
-            _field = Enumerable.Range(0, 9).ToArray();
-            for (int j = _field.Length; j >= 1; j--)
-            {
-                int item = Rnd.Range(0, j);
-                if (item < j - 1)
-                {
-                    var t = _field[item];
-                    _field[item] = _field[j - 1];
-                    _field[j - 1] = t;
-                }
-            }
-
-            permutations = 0;
-            for (int i = 0; i <= 8; i++)
-                for (int j = 0; j < i; j++)
-                    if (_field[i] != 0 && _field[j] != 0 && (_field[i] < _field[j]))
-                        permutations++;
-        }
-        while (permutations % 2 != 0);
-
-        Debug.LogFormat("[Mystic Square #{3}] Field:\n{0}\n{1}\n{2}", "" + _field[0] + _field[1] + _field[2], "" + _field[3] + _field[4] + _field[5], "" + _field[6] + _field[7] + _field[8], _moduleId);
-    }
-
     void OnPress(int position)
     {
         if (!_isActivated)
@@ -257,9 +284,9 @@ public class MysticSquareModule : MonoBehaviour
         {
             _field[position] = 0;
             _field[empty] = button + 1;
-            var dif = ButtonObjects[button].gameObject.transform.position - EmptyField.transform.position;
-            ButtonObjects[button].gameObject.transform.Translate(-dif, Space.World);
-            EmptyField.transform.Translate(dif, Space.World);
+
+            _buttonIndexes.Enqueue(button);
+            _buttonPositions.Enqueue(getButtonPos(empty % 3, empty / 3));
 
             // Check for strike or pass
             if (_isInDanger)
@@ -269,11 +296,18 @@ public class MysticSquareModule : MonoBehaviour
                     _isInDanger = false;
                     Debug.LogFormat("[Mystic Square #{0}] Found the knight.", _moduleId);
                 }
-                if (_field[_skullPos] == 0)
+                else if (_field[_skullPos] == 0)
+                {
+                    Debug.LogFormat("[Mystic Square #{0}] Uncovered the skull before finding the knight.", _moduleId);
                     GetComponent<KMBombModule>().HandleStrike();
+                }
             }
-            else if (checkWin())
+
+            if (checkWin())
+            {
+                Debug.LogFormat("[Mystic Square #{0}] Module solved.", _moduleId);
                 GetComponent<KMBombModule>().HandlePass();
+            }
         }
     }
 
