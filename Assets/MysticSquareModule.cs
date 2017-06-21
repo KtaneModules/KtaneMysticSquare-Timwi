@@ -119,10 +119,10 @@ public class MysticSquareModule : MonoBehaviour
             case 21: fieldStr[6] = '1'; fieldStr[4] = '2'; fieldStr[2] = '3'; break;
             case 22: fieldStr[0] = '3'; fieldStr[4] = '2'; fieldStr[8] = '1'; break;
             case 23: fieldStr[6] = '3'; fieldStr[4] = '2'; fieldStr[2] = '1'; break;
-            case 30: fieldStr[0] = '1'; fieldStr[1] = '2'; fieldStr[2] = '3'; fieldStr[4] = '4'; fieldStr[7] = '5'; break;
-            case 31: fieldStr[0] = '1'; fieldStr[3] = '2'; fieldStr[6] = '3'; fieldStr[4] = '4'; fieldStr[5] = '5'; break;
-            case 32: fieldStr[6] = '1'; fieldStr[7] = '2'; fieldStr[8] = '3'; fieldStr[4] = '4'; fieldStr[1] = '5'; break;
-            case 33: fieldStr[2] = '1'; fieldStr[5] = '2'; fieldStr[8] = '3'; fieldStr[4] = '4'; fieldStr[3] = '5'; break;
+            case 30: fieldStr[0] = '1'; fieldStr[1] = '2'; fieldStr[2] = '3'; fieldStr[4] = '4'; break;
+            case 31: fieldStr[0] = '1'; fieldStr[3] = '2'; fieldStr[6] = '3'; fieldStr[4] = '4'; break;
+            case 32: fieldStr[6] = '1'; fieldStr[7] = '2'; fieldStr[8] = '3'; fieldStr[4] = '4'; break;
+            case 33: fieldStr[2] = '1'; fieldStr[5] = '2'; fieldStr[8] = '3'; fieldStr[4] = '4'; break;
         }
         Debug.LogFormat("[Mystic Square #{3}] Easy solution:\n{0}\n{1}\n{2}", "" + fieldStr[0] + fieldStr[1] + fieldStr[2], "" + fieldStr[3] + fieldStr[4] + fieldStr[5], "" + fieldStr[6] + fieldStr[7] + fieldStr[8], _moduleId);
 
@@ -265,10 +265,10 @@ public class MysticSquareModule : MonoBehaviour
             case 21: return _field[6] == 1 && _field[4] == 2 && _field[2] == 3;
             case 22: return _field[0] == 3 && _field[4] == 2 && _field[8] == 1;
             case 23: return _field[6] == 3 && _field[4] == 2 && _field[2] == 1;
-            case 30: return _field[0] == 1 && _field[1] == 2 && _field[2] == 3 && _field[4] == 4 && _field[7] == 5;
-            case 31: return _field[0] == 1 && _field[3] == 2 && _field[6] == 3 && _field[4] == 4 && _field[5] == 5;
-            case 32: return _field[6] == 1 && _field[7] == 2 && _field[8] == 3 && _field[4] == 4 && _field[1] == 5;
-            case 33: return _field[2] == 1 && _field[5] == 2 && _field[8] == 3 && _field[4] == 4 && _field[3] == 5;
+            case 30: return _field[0] == 1 && _field[1] == 2 && _field[2] == 3 && _field[4] == 4;
+            case 31: return _field[0] == 1 && _field[3] == 2 && _field[6] == 3 && _field[4] == 4;
+            case 32: return _field[6] == 1 && _field[7] == 2 && _field[8] == 3 && _field[4] == 4;
+            case 33: return _field[2] == 1 && _field[5] == 2 && _field[8] == 3 && _field[4] == 4;
         }
         return false;
     }
