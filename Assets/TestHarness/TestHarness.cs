@@ -180,7 +180,7 @@ public class FakeBombInfo : MonoBehaviour
         Debug.Log("Serial: " + serial);
     }
 
-    float startupTime = 3f;
+    float startupTime = .5f;
 
     public delegate void LightsOn();
     public LightsOn ActivateLights;
@@ -402,7 +402,7 @@ public class TestHarness : MonoBehaviour
                 if (f.FieldType.Equals(typeof(KMGameInfo)))
                 {
                     KMGameInfo component = (KMGameInfo) f.GetValue(s);
-                    component.OnLightsChange += new KMGameInfo.KMLightsChangeDelegate(fakeInfo.OnLights);
+                    fakeInfo.OnLights += on => component.OnLightsChange(on);
                     //component.OnAlarmClockChange += new KMGameInfo.KMAlarmClockChangeDelegate(fakeInfo.OnAlarm);
                     continue;
                 }
