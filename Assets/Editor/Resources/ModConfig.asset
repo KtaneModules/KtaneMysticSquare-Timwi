@@ -13,5 +13,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: MysticSquare
   title: Mystic Square
+  description: 'Inspired by the classic Mystic Square, but with a few features.
+
+
+    Module created and implemented by Konqi, currently maintained by Timwi.
+
+
+    [url=http://ktane.timwi.de/PDF/Mystic%20Square.pdf]Manual PDF[/url]
+
+    [url=http://ktane.timwi.de/HTML/Mystic%20Square.html]Manual HTML[/url]'
   version: 1.0
   outputFolder: build
+  previewImage: {fileID: 2800000, guid: a982b048ff33c9948958da61d1ce66e3, type: 3}
