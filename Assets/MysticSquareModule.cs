@@ -17,6 +17,7 @@ public class MysticSquareModule : MonoBehaviour
     private int _skullPos, _knightPos, _winningCondition;
     private bool _isInDanger;
     private bool _isActivated;
+    private bool _isSolved;
 
     private Queue<int> _buttonIndexes = new Queue<int>();
     private Queue<Vector3> _buttonPositions = new Queue<Vector3>();
@@ -136,7 +137,7 @@ public class MysticSquareModule : MonoBehaviour
 
     private IEnumerator MoveButtons()
     {
-        const int numFrames = 5;
+        const float duration = .1f;
 
         while (true)
         {
@@ -146,13 +147,15 @@ public class MysticSquareModule : MonoBehaviour
             var ix = _buttonIndexes.Dequeue();
             var oldPos = ButtonObjects[ix].localPosition;
             var newPos = _buttonPositions.Dequeue();
-            for (int i = 1; i <= numFrames; i++)
+            var elapsed = 0f;
+            while (elapsed < duration)
             {
-                ButtonObjects[ix].localPosition = new Vector3(
-                    easeOutSine(i, numFrames, oldPos.x, newPos.x),
-                    easeOutSine(i, numFrames, oldPos.y, newPos.y),
-                    easeOutSine(i, numFrames, oldPos.z, newPos.z));
                 yield return null;
+                elapsed += Time.deltaTime;
+                ButtonObjects[ix].localPosition = new Vector3(
+                    easeOutSine(Mathf.Min(elapsed, duration), duration, oldPos.x, newPos.x),
+                    easeOutSine(Mathf.Min(elapsed, duration), duration, oldPos.y, newPos.y),
+                    easeOutSine(Mathf.Min(elapsed, duration), duration, oldPos.z, newPos.z));
             }
         }
     }
@@ -275,7 +278,7 @@ public class MysticSquareModule : MonoBehaviour
 
     void OnPress(int position)
     {
-        if (!_isActivated)
+        if (!_isActivated || _isSolved)
             return;
         ButtonSelectables[position].AddInteractionPunch();
         int empty = Array.IndexOf(_field, 0);
@@ -307,12 +310,16 @@ public class MysticSquareModule : MonoBehaviour
             {
                 Debug.LogFormat("[Mystic Square #{0}] Module solved.", _moduleId);
                 GetComponent<KMBombModule>().HandlePass();
+                _isSolved = true;
             }
         }
     }
 
     IEnumerator ProcessTwitchCommand(string command)
     {
+        if (!_isActivated || _isSolved)
+            yield break;
+
         var pieces = command.ToLowerInvariant().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         if (pieces.Length < 2 || pieces[0] != "press")
             yield break;
