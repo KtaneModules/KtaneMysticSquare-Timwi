@@ -315,6 +315,10 @@ public class MysticSquareModule : MonoBehaviour
         }
     }
 
+#pragma warning disable 414
+    private string TwitchHelpMessage = @"Move the numbers around with “!{0} press 1 3 2 1 3 4 6 8”.";
+#pragma warning restore 414
+
     IEnumerator ProcessTwitchCommand(string command)
     {
         if (!_isActivated || _isSolved)
@@ -354,12 +358,13 @@ public class MysticSquareModule : MonoBehaviour
             }
         }
 
+        yield return null;
+
         foreach (var func in funcs)
         {
-            var btn = func();
-            yield return btn;
             yield return new WaitForSeconds(.1f);
-            yield return btn;
+            var btn = func();
+            btn.OnInteract();
         }
     }
 }
