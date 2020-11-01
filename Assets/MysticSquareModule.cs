@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -249,29 +250,29 @@ public class MysticSquareModule : MonoBehaviour
         return _field[2] + _field[5] + _field[8];
     }
 
-    bool checkWin()
+    bool checkWin(int[] field)
     {
-        if (_field.SequenceEqual(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 }))
+        if (field.SequenceEqual(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 }))
             return true;
 
         switch (_winningCondition)
         {
-            case 0: return _field[0] == 1 && _field[2] == 2 && _field[6] == 4 && _field[8] == 3;
-            case 1: return _field[0] == 1 && _field[2] == 2 && _field[6] == 3 && _field[8] == 4;
-            case 2: return _field[0] == 1 && _field[2] == 3 && _field[6] == 7 && _field[8] == 5;
-            case 3: return _field[0] == 1 && _field[2] == 3 && _field[6] == 5 && _field[8] == 7;
-            case 10: return _field[1] == 1 && _field[5] == 2 && _field[7] == 3 && _field[3] == 4;
-            case 11: return _field[1] == 1 && _field[5] == 2 && _field[7] == 4 && _field[3] == 3;
-            case 12: return _field[1] == 2 && _field[5] == 4 && _field[7] == 6 && _field[3] == 8;
-            case 13: return _field[1] == 2 && _field[5] == 4 && _field[7] == 8 && _field[3] == 6;
-            case 20: return _field[0] == 1 && _field[4] == 2 && _field[8] == 3;
-            case 21: return _field[6] == 1 && _field[4] == 2 && _field[2] == 3;
-            case 22: return _field[0] == 3 && _field[4] == 2 && _field[8] == 1;
-            case 23: return _field[6] == 3 && _field[4] == 2 && _field[2] == 1;
-            case 30: return _field[0] == 1 && _field[1] == 2 && _field[2] == 3 && _field[4] == 4;
-            case 31: return _field[0] == 1 && _field[3] == 2 && _field[6] == 3 && _field[4] == 4;
-            case 32: return _field[6] == 1 && _field[7] == 2 && _field[8] == 3 && _field[4] == 4;
-            case 33: return _field[2] == 1 && _field[5] == 2 && _field[8] == 3 && _field[4] == 4;
+            case 0: return field[0] == 1 && field[2] == 2 && field[6] == 4 && field[8] == 3;
+            case 1: return field[0] == 1 && field[2] == 2 && field[6] == 3 && field[8] == 4;
+            case 2: return field[0] == 1 && field[2] == 3 && field[6] == 7 && field[8] == 5;
+            case 3: return field[0] == 1 && field[2] == 3 && field[6] == 5 && field[8] == 7;
+            case 10: return field[1] == 1 && field[5] == 2 && field[7] == 3 && field[3] == 4;
+            case 11: return field[1] == 1 && field[5] == 2 && field[7] == 4 && field[3] == 3;
+            case 12: return field[1] == 2 && field[5] == 4 && field[7] == 6 && field[3] == 8;
+            case 13: return field[1] == 2 && field[5] == 4 && field[7] == 8 && field[3] == 6;
+            case 20: return field[0] == 1 && field[4] == 2 && field[8] == 3;
+            case 21: return field[6] == 1 && field[4] == 2 && field[2] == 3;
+            case 22: return field[0] == 3 && field[4] == 2 && field[8] == 1;
+            case 23: return field[6] == 3 && field[4] == 2 && field[2] == 1;
+            case 30: return field[0] == 1 && field[1] == 2 && field[2] == 3 && field[4] == 4;
+            case 31: return field[0] == 1 && field[3] == 2 && field[6] == 3 && field[4] == 4;
+            case 32: return field[6] == 1 && field[7] == 2 && field[8] == 3 && field[4] == 4;
+            case 33: return field[2] == 1 && field[5] == 2 && field[8] == 3 && field[4] == 4;
         }
         return false;
     }
@@ -306,7 +307,7 @@ public class MysticSquareModule : MonoBehaviour
                 }
             }
 
-            if (checkWin())
+            if (checkWin(_field))
             {
                 Debug.LogFormat("[Mystic Square #{0}] Module solved.", _moduleId);
                 GetComponent<KMBombModule>().HandlePass();
@@ -365,6 +366,96 @@ public class MysticSquareModule : MonoBehaviour
             yield return new WaitForSeconds(.1f);
             var btn = func();
             btn.OnInteract();
+        }
+    }
+
+    struct SolveQueueItem
+    {
+        public string PrevConfiguration;
+        public string NextConfiguration;
+        public int Button;
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (_isSolved)
+            yield break;
+
+        var startConfiguration = _field.Join("") + (_isInDanger ? "-" : "+");
+        List<int> threadSolution = null;
+
+        var thread = new Thread(() =>
+        {
+            var q = new Queue<SolveQueueItem>();
+            q.Enqueue(new SolveQueueItem { Button = -1, NextConfiguration = startConfiguration });
+            var already = new Dictionary<string, SolveQueueItem>();
+            string winningConfiguration = null;
+
+            while (q.Count > 0)
+            {
+                var item = q.Dequeue();
+                if (already.ContainsKey(item.NextConfiguration))
+                    continue;
+                already[item.NextConfiguration] = item;
+                if (checkWin(item.NextConfiguration.Substring(0, 9).Select(ch => ch - '0').ToArray()))
+                {
+                    winningConfiguration = item.NextConfiguration;
+                    break;
+                }
+
+                var gapIx = item.NextConfiguration.IndexOf('0');
+                if (gapIx % 3 != 0 && (item.NextConfiguration.EndsWith("+") || _skullPos != gapIx - 1))
+                {
+                    var config = item.NextConfiguration.Substring(0, gapIx - 1) + "0" + item.NextConfiguration.Substring(gapIx - 1, 1) + item.NextConfiguration.Substring(gapIx + 1);
+                    if (_knightPos == gapIx - 1)
+                        config = config.Substring(0, 9) + "+";
+                    q.Enqueue(new SolveQueueItem { PrevConfiguration = item.NextConfiguration, NextConfiguration = config, Button = gapIx - 1 });
+                }
+                if (gapIx % 3 != 2 && (item.NextConfiguration.EndsWith("+") || _skullPos != gapIx + 1))
+                {
+                    var config = item.NextConfiguration.Substring(0, gapIx) + item.NextConfiguration.Substring(gapIx + 1, 1) + "0" + item.NextConfiguration.Substring(gapIx + 2);
+                    if (_knightPos == gapIx + 1)
+                        config = config.Substring(0, 9) + "+";
+                    q.Enqueue(new SolveQueueItem { PrevConfiguration = item.NextConfiguration, NextConfiguration = config, Button = gapIx + 1 });
+                }
+                if (gapIx / 3 != 0 && (item.NextConfiguration.EndsWith("+") || _skullPos != gapIx - 3))
+                {
+                    var config = item.NextConfiguration.Substring(0, gapIx - 3) + "0" + item.NextConfiguration.Substring(gapIx - 2, 2) + item.NextConfiguration.Substring(gapIx - 3, 1) + item.NextConfiguration.Substring(gapIx + 1);
+                    if (_knightPos == gapIx - 3)
+                        config = config.Substring(0, 9) + "+";
+                    q.Enqueue(new SolveQueueItem { PrevConfiguration = item.NextConfiguration, NextConfiguration = config, Button = gapIx - 3 });
+                }
+                if (gapIx / 3 != 2 && (item.NextConfiguration.EndsWith("+") || _skullPos != gapIx + 3))
+                {
+                    var config = item.NextConfiguration.Substring(0, gapIx) + item.NextConfiguration.Substring(gapIx + 3, 1) + item.NextConfiguration.Substring(gapIx + 1, 2) + "0" + item.NextConfiguration.Substring(gapIx + 4);
+                    if (_knightPos == gapIx + 3)
+                        config = config.Substring(0, 9) + "+";
+                    q.Enqueue(new SolveQueueItem { PrevConfiguration = item.NextConfiguration, NextConfiguration = config, Button = gapIx + 3 });
+                }
+            }
+
+            if (winningConfiguration == null || !already.ContainsKey(winningConfiguration))
+                throw new InvalidOperationException();
+
+            var buttonPresses = new List<int>();
+            var cnf = winningConfiguration;
+            while (cnf != null)
+            {
+                var item = already[cnf];
+                buttonPresses.Add(item.Button);
+                cnf = item.PrevConfiguration;
+            }
+            threadSolution = buttonPresses;
+        });
+        thread.Start();
+
+        while (threadSolution == null)
+            yield return true;
+
+        for (int i = threadSolution.Count - 2; i >= 0; i--)
+        {
+            ButtonSelectables[threadSolution[i]].OnInteract();
+            yield return new WaitForSeconds(.1f);
         }
     }
 }
